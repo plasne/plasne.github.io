@@ -179,11 +179,61 @@ myFunction
 });
 ```
 
+Notice that the async function is itself a promise.
+
 ## Arrow Functions
 
-no this, no arguments (rest parameters), do not support new, cannot yield (cannot be used as generators)
+Arrow Functions (ES6) make a lot of things easier to write and read (I have used them through-out this article), but a few things to keep in mind, the function:
 
-immediately invoked function expression (IIFE)
+* doesn't have its own "this"
+* doesn't have "arguments", but it can use rest parameters
+* doesn't support "new"
+* cannot yield (ie. cannot be used as a generator)
+
+One thing in particular I am fond of is Immediately Invoked Function Expressions (IIFE), where the function exists just to run immediately. Consider the above async/await example where the invokation of myFunction was still a promise, it might look better like this where async and a try/catch can be used:
+
+```javascript
+async function myFunction() {
+  const result = await myFunctionThatReturnsPromise1();
+  await myFunctionThatReturnsPromise2(result);
+}
+
+(async () => {
+  try {
+    await myFunction();
+  } catch (ex) {
+    // handle errors
+  }
+})();
+```
+
+Or what about this example:
+
+```javascript
+// without-IIFE, with a hex variable that will be set based on the switch, ugly!
+let hex;
+switch (color) {
+  case "red":
+    hex = "#FF0000";
+    break;
+  case "green":
+    hex = "#00FF00";
+    break;
+  case "blue":
+    hex = "#0000FF";
+    break;
+}
+
+// instead, this is pretty elegant
+const hex = ((_color) => {
+  switch (_color) {
+    case "red":   return "#FF0000";
+    case "green": return "#00FF00";
+    case "blue":  return "#0000FF";
+  }
+})(color);
+
+```
 
 ## of vs in
 
