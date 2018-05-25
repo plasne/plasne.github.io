@@ -5,6 +5,7 @@ title: My Node.js Best Practices
 
 My preferred development language is Node.js. Recently I have been doing a number of projects with other folks and it becomes beneficial to standardize on some best practices. This is by no means exhaustive, but it an attempt to write down some of the practices I prefer to use.
 
+This post talks about some new features in ES6, 7, and 8. This external post goes into much greater detail on new features:
 https://medium.freecodecamp.org/here-are-examples-of-everything-new-in-ecmascript-2016-2017-and-2018-d52fa3b5a70e
 
 ## Classes
@@ -289,12 +290,69 @@ sizes.med = 7;                         // ok
 sizes = { big: 10, med: 7, small: 2 }; // exception
 ```
 
+## Connection Pooling
+
+There are dozens of ways to host applications today. Consider Azure for a moment, you could host:
+
+* in a Function in a consumption App Service Plan
+* in a Function in a dedicated App Service Plan
+* in a Web App in a consumption App Service Plan
+* in a Web App in a dedicated App Service Plan
+* in a Docker container running in Azure Container Instance
+* in a Docker container running in Azure Container Service
+* in Service Fabric
+* in a Virtual Machine exposed via a Load Balancer
+* in a Virtual Machine with a public IP
+* and so on...
+
+All of those solutions have different constraints on the number of outbound connections that are allowed due to SNAT, overlay networks, etc. To make your application portable across multiple hosting methods you need some way to constrain the outbound ports. The 2 things you want to do is create an agent with a pool of sockets that won't go beyond a maximum and keep-alive. The pool will ensure you don't have too many sockets while the keep-alive setting will keep the sockets open for a while so they can be reused, significantly improving performance.
+
 ## Commander
 
-## Connection Pooling
+[Commander](https://github.com/tj/commander.js) is absolutely one of my favorite packages for Node.js. It gives you command line options, actions, help, etc, and is easy to use. Almost every application I write has some use for Commander.
 
 ## Winston
 
+[Winston](https://github.com/winstonjs/winston) is a full-featured logger framework, if you need to do more than console.log and console.error, this is a great library to look at. I tend to like the color coding for event levels and to keep all event levels the same size, so you can do something like this:
+
+```javascript
+const logColors = {
+    "error":   "\x1b[31m", // red
+    "warn":    "\x1b[33m", // yellow
+    "info":    "",         // white
+    "verbose": "\x1b[32m", // green
+    "debug":   "\x1b[32m", // green
+    "silly":   "\x1b[32m"  // green
+};
+const logger = winston.createLogger({
+    level: "debug",
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.timestamp(),
+                winston.format.printf(event => {
+                    const color = logColors[event.level] || "";
+                    const level = event.level.padStart(7);
+                    return `${event.timestamp} ${color}${level}\x1b[0m: ${event.message}`;
+                })
+            )
+        })
+    ]
+});
+```
+
 ## Configuration
 
-## Axios vs Request 
+There are a myriad of ways to handle configuration settled on using Environment Variables because that seems to be a widely accepted method and because it makes it easy to control the settings across environments. However, I still like the idea of allowing for the variables in a file, so [dotenv](https://github.com/motdotla/dotenv) addresses that, and I still like the idea of specifying command line parameters using Commander.
+
+Below is what I will use as an implementation standard whereby settings are determined in the following priority order:
+
+1. Command line
+2. Environment variable
+3. Environment variable from file
+4. Default
+
+```javascript
+const logLevel   = cmd.logLevel   || process.env.LOG_LEVEL           || "error";
+const port       = cmd.port       || process.env.PORT                || 8080;
+```
