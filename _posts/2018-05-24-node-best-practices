@@ -1,4 +1,9 @@
-# Node Best Practices
+---
+layout: post
+title: My Node.js Best Practices
+---
+
+# My Node.js Best Practices
 
 My preferred development language is Node.js. Recently I have been doing a number of projects with other folks and it becomes beneficial to standardize on some best practices. This is by no means exhaustive, but it an attempt to write down some of the practices I prefer to use.
 
@@ -39,12 +44,27 @@ module.export = class Test {
 const test = new Test();
 ```
 
-
+You can inherit like this:
 
 ```javascript
-```
+class Base {
+  get hello() {
+    return "hello";
+  }
+  constructor(value) {
+    // initialize stuff
+  }
+}
 
-You can 
+class Derived extends Base {
+  constructor(value) {
+    super(value);
+  }
+}
+
+const derived = new Derived();
+console.log(derived.hello);
+```
 
 ## Private Variables
 
