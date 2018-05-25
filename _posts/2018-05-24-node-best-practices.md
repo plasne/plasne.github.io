@@ -272,6 +272,11 @@ There seems to be a habit with a lot of folks to use "var", but in pretty much e
 
 I use "const" for almost everything (as you have probably noticed already in this article), something like a simple counter or total are about the only things I use "let" for because they logically need to change. Otherwise, if I am doing something like a multi-step operation I might declare multiple variables using const which makes it more readable.
 
+```javascript
+const distance = (trip1 + trip2 + trip3);
+const mileage = (distance * 0.30);
+```
+
 Keep in mind that "const" only prevents you from re-assigning the variable:
 
 ```javascript
