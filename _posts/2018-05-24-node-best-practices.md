@@ -211,7 +211,6 @@ Or what about this example:
 
 ```javascript
 // without-IIFE, with a hex variable that will be set based on the switch, ugly!
-let hex;
 switch (color) {
   case "red":
     hex = "#FF0000";
@@ -233,13 +232,57 @@ const hex = ((_color) => {
   }
 })(color);
 
+// this is perhaps even better, but not an example of a IIFE
+const colors = { "red": "#FF0000", "green": "#00FF00", "blue": "#0000FF" };
+const hex = colors[color];
+```
+
+IIFE can also help with scoping variables, consider:
+
+```javascript
+const color = "red";
+
+(() => {
+  // I need a color in here too, but didn't pay attention to that already existing
+  const color = "green";
+  console.log(color); // green in here
+})();
+
+console.log(color); // it's ok, it's still red
 ```
 
 ## of vs in
 
+Much is written on the difference between "of" (ES6) and "in", however, as difficult as it is to remember, when working with things that iterable, use "of" and when wanting the members of an object, use "in".
+
+This is made a bit difficult when context switching as most other languages are for...in when dealing with collections, but Node.js is for...of.
+
 ## Template String Literals
 
+Template String Literals (ES6) make it a lot easier and cleaner to build strings. Consider the following example:
+
+```javascript
+const without = "1. " + name + ": \"" + (value || 0) + "\"";
+const with = `1. ${name}: "${(value || 0)}"`;
+```
+
 ## Scope Variables Properly
+
+There seems to be a habit with a lot of folks to use "var", but in pretty much every case "const" or "let" would be better. Both "const" and "let" are block-scoped which goes a long way towards making sure you don't set a function-scoped "var" to something because you didn't remember you used that variable name already.
+
+I use "const" for almost everything (as you have probably noticed already in this article), something like a simple counter or total are about the only things I use "let" for because they logically need to change. Otherwise, if I am doing something like a multi-step operation I might declare multiple variables using const which makes it more readable.
+
+Keep in mind that "const" only prevents you from re-assigning the variable:
+
+```javascript
+const colors = [];
+colors.push("red", "green"); // ok
+colors = ["red", "green"];   // exception
+
+const sizes = { big: 10, med: 5, small: 2 };
+sizes.med = 7;                         // ok
+sizes = { big: 10, med: 7, small: 2 }; // exception
+```
 
 ## Commander
 
