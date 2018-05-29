@@ -212,6 +212,7 @@ Or what about this example:
 
 ```javascript
 // without-IIFE, with a hex variable that will be set based on the switch, ugly!
+let hex;
 switch (color) {
   case "red":
     hex = "#FF0000";
