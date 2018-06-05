@@ -32,3 +32,5 @@ I get:
 ```
 
 Notice that the length of the array is passed to the constructor as the first argument when it is sliced.
+
+This also applies to splice().
