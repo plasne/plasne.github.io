@@ -50,7 +50,9 @@ You might have noticed that all application rights, required consent from a Glob
 
 You will craft a URL like this:
 
-https://login.microsoftonline.com/{directory}.onmicrosoft.com/oauth2/authorize?response_type=code&client_id={appid}&redirect_uri=http%3A%2F%2Ffakeuri&state=not_needed&resource=https%3A%2F%2Fgraph.windows.net&prompt=consent
+```url
+https://login.microsoftonline.com/{directory}.onmicrosoft.com/oauth2/authorize?response_type=code&client_id={appid}&redirect_uri=http%3A%2F%2Ffakeuri&state=not_needed&resource=https%3A%2F%2Fgraph.windows.net&prompt=admin_consent
+```
 
 Replace {directory} with the name of your Azure AD directory. Replace {appid} with the Application ID.
 
