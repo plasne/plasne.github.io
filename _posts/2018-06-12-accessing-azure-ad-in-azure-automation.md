@@ -3,6 +3,8 @@ layout: post
 title: Accessing Azure AD via Azure Automation
 ---
 
+This post describes the method to use Azure AD commands in PowerShell inside an Azure Automation Account. There is a method to connect, provide authorization, and then provide consent.
+
 # Connecting
 
 You can use the following code in Azure Automation to connect to Azure AD:
