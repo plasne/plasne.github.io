@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Create an Azure Automation Connection to Another Directory
+title: Azure Load Balancer Traffic
 ---
 
 There are a number of ways to load balance a workload in Azure (2x layer-4 LBs and 1x layer-7 LB for 1st party load balancers). However, it turns out there are some interesting cavaets about how you can access the frontends and/or spread your backends across networks. I made this chart to help:
