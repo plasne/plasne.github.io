@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Architecture Comparison for IDOC to CSV: Stream vs. Batch
+title: Architecture Comparison for IDOC to CSV - Stream vs. Batch
 ---
 
 # Introduction
