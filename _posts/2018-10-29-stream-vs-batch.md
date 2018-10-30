@@ -34,13 +34,13 @@ The batch processing application is a bit more complicated. Rather than use cont
 
 There are 4 Functions that work together to satisfy the scenario:
 
-Receiver: This function listens for incoming documents in an HTTP message body and saves them to Azure Blob Storage within a time-partitioned "folder".
+- **Receiver**: This function listens for incoming documents in an HTTP message body and saves them to Azure Blob Storage within a time-partitioned "folder".
 
-Start: This function starts a batch process given a partition. This does not do any processing of the actual files but rather creates the CSV append blobs and then chunks up the processing into queued messages.
+- **Start**: This function starts a batch process given a partition. This does not do any processing of the actual files but rather creates the CSV append blobs and then chunks up the processing into queued messages.
 
-Status: This function returns the status of batch processing.
+- **Status**: This function returns the status of batch processing.
 
-Processor: This function monitors the processing queue and and will process messages. Messages are a collection of filenames that will be loaded, matched to schemas, and then appended to CSV files.
+- **Processor**: This function monitors the processing queue and and will process messages. Messages are a collection of filenames that will be loaded, matched to schemas, and then appended to CSV files.
 
 Notice that the primary functional difference with this implementation is that files are _received without validation_ and then _processed as a batch_ after everything has been received.
 
