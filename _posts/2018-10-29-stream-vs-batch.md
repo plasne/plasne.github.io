@@ -3,6 +3,8 @@ layout: post
 title: Architecture Comparison for IDOC to CSV - Stream vs. Batch
 ---
 
+This article compares an IDOC receiver and processor built as a stream processor using containers and a batch processor using Functions.
+
 # Introduction
 
 The customer wants to accept IDOC documents from an SAP server, determine a schema, and parse the document per the schema, and write the values to a CSV file. I originally wrote the application using a stream processing pattern but later the customer decided they wanted a batch process for business reasons. Since I had written the same functionality a couple of different ways, I thought it would make an interesting article to compare the architectures of these applications.
