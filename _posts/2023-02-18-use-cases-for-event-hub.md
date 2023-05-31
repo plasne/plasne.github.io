@@ -9,7 +9,7 @@ I was working on a project recently where Event Hub was used in several differen
 
 This is the standard use-case that everyone should be familiar with. I had messages that needed to be processed by multiple processors. I used the `EventProcessorClient` SDK which provides an easy way to even distribute partitions between my processors. Each processor checkpoints messages as they are processed.
 
-### Alternatives
+### Alternatives (Process Messages)
 
 There are many messaging services that could fit in this role, most notably Kafka or Azure Service Bus. Kafka would be a direct replacement. Service Bus would be a good alternative if the success or failure of individual messages is important and if the performance requirements could still be met.
 
@@ -39,7 +39,7 @@ To fulfill these requirements, I implemented the following:
 
 - The processors never checkpoint because if a processor is restarted, it would need to read events from 24-hours back (or whatever the window is set to) anyway.
 
-### Alternatives
+### Alternatives (Event Streaming)
 
 The customer could have used Spark for this use-case, however, they were already using Event Hubs heavily and didn't want to take a new dependency.
 
@@ -63,6 +63,8 @@ I implemented the following:
 
 - There is no checkpointing, if the processor starts up again, it will start reading from the tail again.
 
+An implementation of this can be found [here](https://github.com/plasne/change-feed).
+
 ### Consumer Groups
 
 The above implementation means that each replica for each service is considered a [non-epoch consumer](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-event-processor-host#no-epoch), and is therefore limited such that no consumer group may have more than 5 consumers. For instance, if you have 3 services with 3 replicas each, you will have 9 consumers and therefore need at least 2 consumer groups. If a service is not going to support more than 5 replicas, then you could simply have a consumer group dedicated to that service. If you have a service that may have more than 5 replicas, then you will need to have multiple consumer groups for that service and some way to load balance between them. Based on tier, there is also a maximum number of consumer groups per Event Hub, which can be found [here](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits#basic-vs-standard-vs-premium-vs-dedicated-tiers).
@@ -79,7 +81,7 @@ For this customer, several services required more than 5 replicas, so I implemen
 
 - Whenever messages are read and the QuotaExceeded exception is thrown, the code will pick a new random consumer group from the list.
 
-### Alternatives
+### Alternatives (Change Feed)
 
 I don't believe there are great alternatives, but a few possibilities were mentioned by others:
 
