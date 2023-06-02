@@ -9,7 +9,7 @@ References to SDKs in this document refer to C#, though the concepts used here c
 
 ## Process Messages
 
-This is the standard use-case that everyone should be familiar with. We had events that needed to be processed by replicas. We used the `EventProcessorClient` SDK which provides an easy way to even distribute partitions between those consumers. Each processor checkpoints events as they are processed.
+This is the standard use-case that everyone should be familiar with. We had events that needed to be processed by replicas. We used the `EventProcessorClient` SDK which provides an easy way to evenly distribute partitions between those consumers. Each processor checkpoints events as they are processed.
 
 ### Alternatives (Process Messages)
 
@@ -21,7 +21,7 @@ We had another use-case whereby events were partitioned such that each partition
 
 The requirements are:
 
-- The events are partitioned such that all events required to process a set of scenarios are on the same partition.
+- The events are partitioned such that all events required to process a set of expressions are on the same partition.
 
 - The window of events to consider is configurable but fixed (ex. 24 hours).
 
