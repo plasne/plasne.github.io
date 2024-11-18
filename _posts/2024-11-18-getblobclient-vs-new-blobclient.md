@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Blob SDK Performance
+title: GetBlobClient is faster than new BlobClient
 ---
 
 Recently I discovered a significant performance difference using the C# Blob SDK (Azure.Storage.Blobs 12.22.2).
@@ -38,4 +38,31 @@ var cred = new DefaultAzureCredential(new DefaultAzureCredentialOptions
     ExcludeVisualStudioCredential = true,
     ExcludeWorkloadIdentityCredential = true
 });
+```
+
+## Results
+
+```bash
+plasne@Peters-MacBook-Pro test % dotnet run
+Using new BlobClient...
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-04.json, after 6522 ms
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-05.json, after 684 ms
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-06.json, after 439 ms
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-07.json, after 427 ms
+plasne@Peters-MacBook-Pro test % 
+plasne@Peters-MacBook-Pro test % 
+plasne@Peters-MacBook-Pro test % dotnet run
+Using GetBlobClient...
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-04.json, after 1114 ms
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-05.json, after 61 ms
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-06.json, after 51 ms
+Downloading blob to local file...
+Blob downloaded to /Users/plasne/Documents/test/1100083-2024-01-07.json, after 53 ms
 ```
